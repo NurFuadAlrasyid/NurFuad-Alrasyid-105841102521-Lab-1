@@ -11,7 +11,7 @@ const ButtonCustom = () => {
             marginBottom: 100,
           }}>
             <View style={{
-              backgroundColor: 'red',
+              backgroundColor: 'blue',
               width: 150,
               height: 80,
               borderRadius: 10,
@@ -28,7 +28,7 @@ const ButtonCustom = () => {
               </Text>
             </View>
             <View style={{
-              backgroundColor: 'blue',
+              backgroundColor: 'grey',
               width: 150,
               height: 80,
               borderRadius: 10,
