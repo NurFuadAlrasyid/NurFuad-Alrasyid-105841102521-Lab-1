@@ -7,6 +7,8 @@ import ForgotPassword from './ForgotPassword';
 export default function App() {
   return (
     <>
+    {/*<SignUp /> */}
+    {/*<Login /> */}
     {<ForgotPassword />}
     </>
   );
