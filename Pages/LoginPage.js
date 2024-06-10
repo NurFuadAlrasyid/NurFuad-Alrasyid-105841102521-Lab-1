@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 
-const Login = () => {
+const Loginpage = (navigation) => {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Login</Text>
@@ -29,13 +29,13 @@ const Login = () => {
         <View style={styles.socialButtonsContainer}>
           <TouchableOpacity style={styles.socialButton}>
             <Image
-              source={require('./assets/google.png')}
+              source={require('../assets/google.png')}
               style={styles.socialButtonIcon}
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.socialButton}>
             <Image
-              source={require('./assets/facebook.png')}
+              source={require('../assets/facebook.png')}
               style={styles.socialButtonIcon}
             />
           </TouchableOpacity>
@@ -107,4 +107,4 @@ const Login = () => {
     },
   });
   
-  export default Login;
+  export default Loginpage;
