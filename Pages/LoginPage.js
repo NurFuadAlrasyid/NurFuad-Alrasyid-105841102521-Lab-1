@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 
-const Loginpage = (navigation) => {
+const LoginPage = () => {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Login</Text>
@@ -107,4 +107,4 @@ const Loginpage = (navigation) => {
     },
   });
   
-  export default Loginpage;
+  export default LoginPage;

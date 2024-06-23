@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 
-const SignUp = () => {
+const SignUpPage = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign up</Text>
@@ -33,13 +33,13 @@ const SignUp = () => {
       <View style={styles.socialButtonsContainer}>
         <TouchableOpacity style={styles.socialButton}>
           <Image
-            source={require('./assets/google.png')}
+            source={require('../assets/google.png')}
             style={styles.socialButtonIcon}
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.socialButton}>
           <Image
-            source={require('./assets/facebook.png')}
+            source={require('../assets/facebook.png')}
             style={styles.socialButtonIcon}
           />
         </TouchableOpacity>
@@ -114,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp;
+export default SignUpPage;
