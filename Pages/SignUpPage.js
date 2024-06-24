@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 
-const SignUpPage = () => {
+const SignUpPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign up</Text>
@@ -22,7 +22,7 @@ const SignUpPage = () => {
       />
 
       <Text style={styles.alreadyHaveAccount}>
-        Already have an account? <Text style={styles.loginLink}>Login</Text>
+        Already have an account? <Text style={styles.loginLink} onPress={() => navigation.navigate('Login')}>Login</Text>
       </Text>
 
       <TouchableOpacity style={styles.signUpButton}>

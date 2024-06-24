@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 
-const LoginPage = () => {
+const LoginPage = ({ navigation }) => {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Login</Text>
@@ -17,7 +17,7 @@ const LoginPage = () => {
           secureTextEntry
         />
   
-        <Text style={styles.forgotYourPassword}>
+        <Text style={styles.forgotYourPassword} onPress={() => navigation.navigate('ForgotPassword')}>
           Forgot your paswword? 
         </Text>
   
