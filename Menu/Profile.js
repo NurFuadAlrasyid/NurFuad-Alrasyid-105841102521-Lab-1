@@ -9,7 +9,7 @@ const Profile = () => {
         <Image source={{ uri: './assets/main-menu/search.png' }} style={styles.searchIcon} />
       </View>
       <View style={styles.profileContainer}>
-        <Image source={require('./assets/main-menu/FotoProfil.jpg')} style={styles.profileImage} />
+        <Image source={require('../assets/main-menu/FotoProfil.jpg')} style={styles.profileImage} />
         <Text style={styles.nameText}>NurFuad Alrasyid</Text>
         <Text style={styles.emailText}>fuad.alrasyid789@gmail.com</Text>
       </View>

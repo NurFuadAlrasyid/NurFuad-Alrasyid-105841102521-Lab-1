@@ -1,48 +1,84 @@
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { Text, TextInput, TouchableOpacity, View, Image, StyleSheet } from 'react-native';
+import { useFonts } from 'expo-font';
+import { useNavigation } from '@react-navigation/native';
 
-const SignUpPage = ({ navigation }) => {
+const SignUpPage = () => {
+  const [fontsLoaded] = useFonts({
+    'Metropolis-Bold': require('../assets/fonts/Metropolis-Bold.otf'),
+    'Metropolis-Medium': require('../assets/fonts/Metropolis-Medium.otf'),
+  });
+
+  const [formSignUp, setForm] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+
+  const navigation = useNavigation();
+
+  const onSubmit = () => {
+    if (formSignUp.name && formSignUp.email && formSignUp.password) {
+      alert('Sign Up Berhasil');
+      navigation.navigate('Login');
+    } else {
+      alert('Sign Up Gagal', 'Semua field harus diisi');
+    }
+  };
+
+  if (!fontsLoaded) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Font tidak ditemukan!</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign up</Text>
-      
+      <Text style={[styles.title, { fontFamily: 'Metropolis-Bold' }]}>Sign Up</Text>
+      <Text style={styles.label}>Name</Text>
       <TextInput
         style={styles.input}
         placeholder="Name"
+        onChangeText={(text) => setForm({ ...formSignUp, name: text })}
+        value={formSignUp.name}
       />
+      <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
-        keyboardType="email-address"
+        onChangeText={(text) => setForm({ ...formSignUp, email: text })}
+        value={formSignUp.email}
       />
+      <Text style={styles.label}>Password</Text>
       <TextInput
         style={styles.input}
         placeholder="Password"
-        secureTextEntry
+        secureTextEntry={true}
+        onChangeText={(text) => setForm({ ...formSignUp, password: text })}
+        value={formSignUp.password}
       />
-
-      <Text style={styles.alreadyHaveAccount}>
-        Already have an account? <Text style={styles.loginLink} onPress={() => navigation.navigate('Login')}>Login</Text>
-      </Text>
-
-      <TouchableOpacity style={styles.signUpButton}>
-        <Text style={styles.signUpButtonText}>SIGN UP</Text>
+      <TouchableOpacity style={styles.signUpButton} onPress={onSubmit}>
+        <Text style={styles.signUpButtonText}>Sign Up</Text>
       </TouchableOpacity>
-
-      <Text style={styles.orSignUpWith}>Or sign up with social account</Text>
-      <View style={styles.socialButtonsContainer}>
-        <TouchableOpacity style={styles.socialButton}>
-          <Image
-            source={require('../assets/google.png')}
-            style={styles.socialButtonIcon}
-          />
+      <View style={styles.loginContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={[styles.loginText, { fontFamily: 'Metropolis-Medium' }]}>
+            Already have an account? <Text style={styles.loginLink}>→</Text>
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.socialButton}>
-          <Image
-            source={require('../assets/facebook.png')}
-            style={styles.socialButtonIcon}
-          />
-        </TouchableOpacity>
+      </View>
+      <View style={styles.socialSignUpContainer}>
+        <Text style={styles.orSignUpWith}>Or sign up with a social account</Text>
+        <View style={styles.socialButtonsContainer}>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image source={require('../assets/google.png')} style={styles.socialButtonIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image source={require('../assets/facebook.png')} style={styles.socialButtonIcon} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -55,54 +91,76 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 18,
+    color: 'gray',
+  },
   title: {
     fontSize: 36,
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
   },
   input: {
     height: 50,
-    borderColor: 'green',
+    borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
-    fontSize: 18,
-    marginBottom: 10,
-  },
-  alreadyHaveAccount: {
-    marginTop: 10,
     fontSize: 16,
-  },
-  loginLink: {
-    color: 'green',
+    marginBottom: 15,
   },
   signUpButton: {
     backgroundColor: 'green',
     paddingVertical: 15,
     borderRadius: 5,
-    marginTop: 20,
     alignItems: 'center',
+    marginBottom: 20,
   },
   signUpButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
   },
+  loginContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  loginText: {
+    fontSize: 14,
+    color: 'blue',
+  },
+  loginLink: {
+    color: 'blue',
+    textDecorationLine: 'underline',
+  },
+  socialSignUpContainer: {
+    alignItems: 'center',
+  },
   orSignUpWith: {
-    marginTop: 20,
     fontSize: 16,
+    color: 'gray',
+    marginBottom: 20,
     textAlign: 'center',
   },
   socialButtonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 20,
+    justifyContent: 'space-between',
+    width: '60%',
   },
   socialButton: {
     backgroundColor: '#f0f0f0',
     padding: 10,
     borderRadius: 5,
-    marginHorizontal: 10,
     alignItems: 'center',
     width: 50,
     height: 50,

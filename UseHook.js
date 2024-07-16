@@ -16,10 +16,28 @@ import FavoritesAktif from './assets/main-menu/favorites-aktif.jpg'
 import FavoritesNonAktif from './assets/main-menu/favorites-nonaktif.jpg'
 import ProfileAktif from './assets/main-menu/profile-aktif.jpg'
 import ProfileNonAktif from './assets/main-menu/profile-nonaktif.jpg'
-import Shop from './Shop';
-import Bag from './Bag';
-import Favorites from './Favorites';
-import Profile from './Profile';
+import Shop from './Menu/Shop';
+import Bag from './Menu/Bag';
+import Favorites from './Menu/Favorites';
+import Profile from './Menu/Profile';
+
+const Stack = createNativeStackNavigator();
+
+function App() {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false,
+                }}>
+                     <Stack.Screen name='Login' component={LoginPage} />
+                <Stack.Screen name='Home' component={MyTabs} />
+               
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
+
 
 const Tab = createBottomTabNavigator();
 
@@ -108,20 +126,5 @@ function HomeScreen({ navigation }) {
     );
 }
 
-const Stack = createNativeStackNavigator();
-
-function App() {
-    return (
-        <NavigationContainer>
-            <Stack.Navigator
-                screenOptions={{
-                    headerShown: false,
-                }}>
-                <Stack.Screen name='Home' component={MyTabs} />
-                <Stack.Screen name='Login' component={LoginPage} />
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
-}
 
 export default App;
