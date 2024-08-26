@@ -1,128 +1,105 @@
-import { StyleSheet, Text, View, TextInput, Button, Image } from 'react-native';
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { View, Text, Button, Image } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginPage from './Pages/LoginPage'
+import SignUpPage from './Pages/SignUpPage';
+import ForgotPasswordPage from './Pages/ForgotPasswordPage';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomeAktif from './assets/main-menu/home-aktif.jpg'
+import HomeNonAktif from './assets/main-menu/home-nonaktif.jpg'
+import ShopAktif from './assets/main-menu/shop_aktif.jpg'
+import ShopNonAktif from './assets/main-menu/shop_nonaktif.jpg'
+import MapsAktif from './assets/main-menu/maps-aktif.jpg'
+import MapsNonAktif from './assets/main-menu/maps-nonaktif.jpg'
+import ProfileAktif from './assets/main-menu/profile-aktif.jpg'
+import ProfileNonAktif from './assets/main-menu/profile-nonaktif.jpg'
+import Shop from './Menu/Shop';
+import Maps from './Menu/Maps';
+import Profile from './Menu/Profile';
+import Home from './Menu/Home'
 
-const LoginSimak = () => {
-  const [data, setData] = useState({
-    nim: '',
-    password: ''
-  });
-  const [userData, setUserData] = useState(null);
-  const [error, setError] = useState('');
 
-  const onSubmit = () => {
-    axios.post('https://api.beasiswa.unismuh.ac.id/api/login', {
-      username: data.nim,
-      password: data.password
-    })
-      .then(response => {
-        if (response.status === 200) {
-          setUserData(response.data.data);
-          setError('');
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        setError('Ada kesalahan. Silahkan cek kembali nim dan password anda.');
-        setUserData(null);
-      });
-  }
+const Stack = createNativeStackNavigator();
 
+function App() {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false,
+                }}>
+                <Stack.Screen name='Sign Up' component={SignUpPage} />
+                <Stack.Screen name='Login' component={LoginPage} />
+                <Stack.Screen name='ForgotPassword' component={ForgotPasswordPage} />
+                <Stack.Screen name='Home' component={MyTabs} />
+               
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
+
+
+const Tab = createBottomTabNavigator();
+
+function MyTabs() {
   return (
-    <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={(value) => setData({ ...data, nim: value })}
-          placeholder="Nim"
-          placeholderTextColor="#aaa"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={(value) => setData({ ...data, password: value })}
-          placeholder="Password"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-        />
-        <Button title="Login" onPress={onSubmit} />
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      </View>
-      {userData && (
-        <View style={styles.userDataContainer}>
-          <Text style={styles.userDataText}>ID: {userData.id}</Text>
-          <Text style={styles.userDataText}>Username: {userData.username}</Text>
-          <Text style={styles.userDataText}>Name: {userData.nama}</Text>
-          <Text style={styles.userDataText}>Role: {userData.role}</Text>
-          <Image
-            style={styles.userImage}
-            source={{ uri: `https://simakad.unismuh.ac.id/upload/mahasiswa/${userData.username}.jpg` }}
-          />
-        </View>
-      )}
-    </View>
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+                <Image
+                source={focused ? HomeAktif : HomeNonAktif}
+                style={{ width: 30, height: 30 }}
+                />
+            ),
+        }}
+      />
+      <Tab.Screen
+        name="Shop"
+            component={Shop}
+            options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+                <Image
+                source={focused ? ShopAktif : ShopNonAktif}
+                style={{ width: 30, height: 30 }}
+                />
+            ),
+        }}
+      />
+      <Tab.Screen
+        name="Gunung"
+            component={Maps}
+            options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+                <Image
+                source={focused ? MapsAktif : MapsNonAktif}
+                style={{ width: 25, height: 25 }}
+                />
+            ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+            component={Profile}
+            options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+                <Image
+                source={focused ? ProfileAktif : ProfileNonAktif}
+                style={{ width: 30, height: 30 }}
+                />
+            ),
+        }}
+      />
+
+    </Tab.Navigator>
   );
 }
 
-export default LoginSimak;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: 20,
-  },
-  inputContainer: {
-    width: '100%',
-    maxWidth: 400,
-    padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-    marginBottom: 20,
-  },
-  input: {
-    height: 50,
-    borderColor: '#ddd',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    fontSize: 16,
-    color: '#333',
-  },
-  errorText: {
-    color: 'red',
-    marginTop: 10,
-    textAlign: 'center',
-  },
-  userDataContainer: {
-    width: '100%',
-    maxWidth: 400,
-    padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-    alignItems: 'center',
-  },
-  userDataText: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 5,
-  },
-  userImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginTop: 10,
-  },
-});
+export default App;

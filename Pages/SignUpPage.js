@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View, Image, StyleSheet } from 'react-native';
+import { Text, TextInput, TouchableOpacity, View, Image, StyleSheet, Alert } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUpPage = () => {
   const [fontsLoaded] = useFonts({
@@ -17,14 +18,32 @@ const SignUpPage = () => {
 
   const navigation = useNavigation();
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (formSignUp.name && formSignUp.email && formSignUp.password) {
-      alert('Sign Up Berhasil');
-      navigation.navigate('Login');
+      try {
+        // Fetch users from the API
+        const response = await fetch('https://jsonplaceholder.typicode.com/users');
+        const users = await response.json();
+  
+        // Check if the email exists in the API data
+        const userExists = users.some(user => user.email === formSignUp.email);
+  
+        if (userExists) {
+          // Simpan data signup ke AsyncStorage
+          await AsyncStorage.setItem('userData', JSON.stringify(formSignUp));
+          Alert.alert('Sign Up Berhasil');
+          navigation.navigate('Login');
+        } else {
+          Alert.alert('Sign Up Gagal', 'Email tidak terdaftar');
+        }
+      } catch (error) {
+        Alert.alert('Error', 'Gagal mengambil data dari server');
+      }
     } else {
-      alert('Sign Up Gagal', 'Semua field harus diisi');
+      Alert.alert('Sign Up Gagal', 'Semua field harus diisi');
     }
   };
+  
 
   if (!fontsLoaded) {
     return (

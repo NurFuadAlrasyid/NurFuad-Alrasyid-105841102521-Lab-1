@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View, Image, StyleSheet } from 'react-native';
+import { Text, TextInput, TouchableOpacity, View, Image, StyleSheet, Alert } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginPage = () => {
   const [fontsLoaded] = useFonts({
@@ -14,12 +15,37 @@ const LoginPage = () => {
     password: ''
   });
 
-  const onSubmit = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigation = useNavigation();
+
+  const onSubmit = async () => {
+    setErrorMessage('');  // Reset error message
+
     if (formLogin.email && formLogin.password) {
-      alert('Login Berhasil');
-      navigation.navigate('Home');
+      try {
+        // Retrieve stored signup data
+        const storedUserData = await AsyncStorage.getItem('userData');
+        if (storedUserData) {
+          const parsedUserData = JSON.parse(storedUserData);
+
+          // Validate login credentials
+          if (
+            formLogin.email === parsedUserData.email &&
+            formLogin.password === parsedUserData.password
+          ) {
+            Alert.alert('Login Berhasil');
+            navigation.navigate('Home');
+          } else {
+            setErrorMessage('Email atau password salah');
+          }
+        } else {
+          setErrorMessage('Data pengguna tidak ditemukan');
+        }
+      } catch (error) {
+        Alert.alert('Error', 'Gagal mengambil data pengguna');
+      }
     } else {
-      alert('Login Gagal');
+      setErrorMessage('Semua field harus diisi');
     }
   };
 
@@ -30,8 +56,6 @@ const LoginPage = () => {
       </View>
     );
   }
-
-  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -51,7 +75,10 @@ const LoginPage = () => {
         onChangeText={(text) => setForm({ ...formLogin, password: text })}
         value={formLogin.password}
       />
-      <TouchableOpacity style={styles.forgotPasswordContainer} onPress={() => navigation.navigate('ForgotPassword')}>
+      <TouchableOpacity
+        style={styles.forgotPasswordContainer}
+        onPress={() => navigation.navigate('ForgotPassword')}
+      >
         <Text style={[styles.forgotPasswordText, { fontFamily: 'Metropolis-Medium' }]}>
           Forgot Password? <Text style={styles.forgotPasswordLink}>→</Text>
         </Text>
@@ -59,6 +86,9 @@ const LoginPage = () => {
       <TouchableOpacity style={styles.loginButton} onPress={onSubmit}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
+      {errorMessage ? (
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
+      ) : null}
       <View style={styles.socialLoginContainer}>
         <Text style={styles.orLoginWith}>Or Login With social media</Text>
         <View style={styles.socialButtonsContainer}>
@@ -132,6 +162,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  errorMessage: {
+    color: 'red',
+    textAlign: 'center',
+    marginBottom: 20,
+    fontSize: 16,
   },
   socialLoginContainer: {
     alignItems: 'center',

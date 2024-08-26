@@ -126,5 +126,4 @@ function HomeScreen({ navigation }) {
     );
 }
 
-
 export default App;

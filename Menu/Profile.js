@@ -1,7 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = () => {
+  const [userData, setUserData] = useState({ name: '', email: '' });
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const storedUserData = await AsyncStorage.getItem('userData');
+        if (storedUserData) {
+          setUserData(JSON.parse(storedUserData));
+        }
+      } catch (error) {
+        console.log('Failed to load user data', error);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -10,8 +28,8 @@ const Profile = () => {
       </View>
       <View style={styles.profileContainer}>
         <Image source={require('../assets/main-menu/FotoProfil.jpg')} style={styles.profileImage} />
-        <Text style={styles.nameText}>NurFuad Alrasyid</Text>
-        <Text style={styles.emailText}>fuad.alrasyid789@gmail.com</Text>
+        <Text style={styles.nameText}>{userData.name}</Text>
+        <Text style={styles.emailText}>{userData.email}</Text>
       </View>
       <View style={styles.optionsContainer}>
         <OptionItem title="My orders" subtitle="Already have 12 orders" />
